@@ -1,5 +1,5 @@
-memstore Cluster
-================
+Cluster Store
+=============
 
 A very simple in-memory object store for use with node cluster
 (or even completely and unrelated node processes).
@@ -29,7 +29,7 @@ you'll probably prefer to use this pattern:
 
 ```js
 var cluster = require('cluster');
-var store = require('memstore-cluster');
+var cstore = require('cluster-store');
 var numCores = require('os').cpus().length;
 
 var opts = {
@@ -46,7 +46,7 @@ var opts = {
 , standalone: (1 === numCores) // overrides serve and connect
 };
 
-memstore.create(opts).then(function (store) {
+cstore.create(opts).then(function (store) {
   // same api as new sqlite3.Database(options.filename)
 
   store.get(id, function (err, data) {
@@ -97,13 +97,13 @@ See <https://github.com/expressjs/session#session-store-implementation>@4.x for 
 Standalone / Master Mode is in-process
 ========================
 
-The `master` in the cluster (meaning `opts.serve = true`) will directly hold the `express-session/session/memory`
-memory store.
+The `master` in the cluster (meaning `opts.serve = true`) will directly hold the specified store
+(a simple memory store by default, or `express-session/session/memory` in the example above)
 
 Likewise, when only one process is being used (`opts.standalone = true`) the listener is
 not started and API is completely in-process.
 
-If you take a look at `wrapper.js` you'll see that it's a rather simple memory store instance.
+If you take a look at `memstore.js` you'll see that it's a rather simple memory store instance.
 
 Security Warning
 ================

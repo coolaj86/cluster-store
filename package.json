@@ -1,5 +1,5 @@
 {
-  "name": "memstore-cluster",
+  "name": "cluster-store",
   "version": "1.0.0",
   "description": "A wrapper to enable the use of a in-process store with node cluster via a socket server (i.e. for Raspberry Pi 2).",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/coolaj86/memstore-cluster.git"
+    "url": "git+https://github.com/coolaj86/cluster-store.git"
   },
   "keywords": [
     "store",
@@ -23,9 +23,9 @@
   "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com/)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/coolaj86/memstore-cluster/issues"
+    "url": "https://github.com/coolaj86/cluster-store/issues"
   },
-  "homepage": "https://github.com/coolaj86/memstore-cluster#readme",
+  "homepage": "https://github.com/coolaj86/cluster-store#readme",
   "dependencies": {
     "ws": "^0.7.2"
   }

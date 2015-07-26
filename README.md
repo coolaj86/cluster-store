@@ -33,7 +33,7 @@ var store = require('memstore-cluster');
 var numCores = require('os').cpus().length;
 
 var opts = {
-  sock: '/tmp/mydb.memstore.sock'
+  sock: '/tmp/memstore.sock'
 
   // If left 'null' or 'undefined' this defaults to a similar memstore
   // with no special logic for 'cookie' or 'expires'

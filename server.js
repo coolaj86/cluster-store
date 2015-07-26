@@ -44,7 +44,9 @@ function createApp(server, options) {
       return [
         'set', 'get', 'touch', 'destroy'
       , 'all', 'length', 'clear'
-      , 'on', 'off', 'removeEventListener', 'addEventListener'
+      , 'emit', 'on', 'off', 'once'
+      , 'removeListener', 'addListener'
+      , 'removeEventListener', 'addEventListener'
       ].filter(function (key) {
         if ('function' === typeof db[key]) {
           return true;
@@ -83,15 +85,20 @@ function createApp(server, options) {
             break;
 
           case 'rpc':
-            cmd.args.push(function () {
-              var args = Array.prototype.slice.call(arguments);
+            if (cmd.hasCallback) {
+              cmd.args.push(function () {
+                var args = Array.prototype.slice.call(arguments);
 
-              ws.send(JSON.stringify({
-                this: this
-              , args: args
-              , id: cmd.id
-              }));
-            });
+                ws.send(JSON.stringify({
+                  this: this
+                , args: args
+                , id: cmd.id
+                }));
+              });
+
+              // TODO handle 'off' by id
+              cmd.args[cmd.args.length - 1].__id = cmd.id;
+            }
 
             db[cmd.func].apply(db, cmd.args);
             break;

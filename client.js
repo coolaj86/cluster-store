@@ -112,11 +112,6 @@ function create(opts) {
     promise = getConnection(opts);
   }
 
-  /*
-  if (opts.connect) {
-  }
-  */
-
   // TODO maybe use HTTP POST instead?
   return promise.then(function (ws) {
     if (ws.masterClient) {
@@ -130,6 +125,7 @@ function create(opts) {
       var cb;
 
       if ('function' === typeof args[args.length - 1]) {
+        // TODO if off, search for cb and derive id from previous onMessage
         id = Math.random();
         cb = args.pop();
       }
@@ -138,6 +134,7 @@ function create(opts) {
         type: 'rpc'
       , func: fname
       , args: args
+      , hasCallback: !!cb
       , filename: opts.filename
       , id: id
       }));
@@ -165,7 +162,16 @@ function create(opts) {
           return;
         }
 
-        if ('on' !== fname) {
+        /*
+        // TODO not sure how to handle 'emit' or 'off'...
+        // it'll just be broken for now
+        if ('off' === fname || 'remove.*Listener'.test(fname)) {
+          var index = ws.___listeners.indexOf(onMessage);
+          ws.___listeners.splice(index, 1);
+        }
+        */
+
+        if ('on' !== fname && ! /add.*Listener/.test(fname)) {
           var index = ws.___listeners.indexOf(onMessage);
           ws.___listeners.splice(index, 1);
         }
@@ -173,6 +179,10 @@ function create(opts) {
         cb.apply(cmd.this, cmd.args);
       }
 
+      // TODO search index by cb for 'off'
+      // and pass it along to the rpc with the original id
+      onMessage.__cb = cb;
+      onMessage.__id = id;
       ws.___listeners.push(onMessage);
     }
 

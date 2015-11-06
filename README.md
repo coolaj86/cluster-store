@@ -47,7 +47,7 @@ var opts = {
 };
 
 cstore.create(opts).then(function (store) {
-  // same api as new sqlite3.Database(options.filename)
+  // same api as new new require('express-session/session/memory')(
 
   store.get(id, function (err, data) {
     console.log(data);

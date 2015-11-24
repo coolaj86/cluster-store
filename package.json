@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/coolaj86/cluster-store#readme",
   "dependencies": {
-    "ws": "^0.7.2"
+    "ws": "^0.8.0"
   }
 }

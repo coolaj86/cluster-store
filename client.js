@@ -23,7 +23,7 @@ function getConnection(opts) {
         function retry() {
           setTimeout(function () {
             getConnection(opts).then(resolve, retry);
-          }, 100 + (Math.random() * 250));
+          }, 100 + (parseInt(require('crypto').randomBytes(2).toString('hex'), 16) % 250));
         }
 
         if (!opts.connect && ('ENOENT' === err.code || 'ECONNREFUSED' === err.code)) {
@@ -126,7 +126,7 @@ function create(opts) {
 
       if ('function' === typeof args[args.length - 1]) {
         // TODO if off, search for cb and derive id from previous onMessage
-        id = Math.random();
+        id = require('crypto').randomBytes(16).toString('hex');
         cb = args.pop();
       }
 

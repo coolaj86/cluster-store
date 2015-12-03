@@ -64,7 +64,7 @@ function createApp(server, options) {
       // you might use location.query.access_token to authenticate or share sessions
       // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312
 
-      ws.__session_id = location.query.session_id || Math.random();
+      ws.__session_id = location.query.session_id || require('crypto').randomBytes(16).toString('hex');
 
       ws.on('message', function (buffer) {
         var cmd;

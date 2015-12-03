@@ -1,8 +1,8 @@
 'use strict';
 
 var cluster = require('cluster');
-//var numCores = 2;
-var numCores = require('os').cpus().length;
+var numCores = 2;
+//var numCores = require('os').cpus().length;
 var id = (cluster.isMaster && '0' || cluster.worker.id).toString();
 
 function run() {
@@ -18,12 +18,27 @@ function run() {
 
       store.get('baz', function (err, data) {
         if (err) { console.error(err); return; }
-        console.log(id, 'should be null:', data);
+        if (null !== data) {
+          console.error(id, 'should be null:', data);
+        }
       });
 
       store.get('foo', function (err, data) {
         if (err) { console.error(err); return; }
-        console.log(id, 'should be bar:', data);
+        if ('bar' !== data) {
+          console.error(id, 'should be bar:', data);
+        }
+
+        store.set('quux', { message: 'hey' }, function (/*err*/) {
+          store.get('quux', function (err, data) {
+            if (err) { console.error(err); return; }
+            if (!data || 'hey' !== data.message) {
+              console.error(id, "should be { message: 'hey' }:", data);
+            } else {
+              console.log('Are there any errors above? If not, we passed!');
+            }
+          });
+        });
       });
     });
   });

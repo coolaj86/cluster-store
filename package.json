@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/coolaj86/cluster-store#readme",
   "dependencies": {
-    "cluster-rpc": "^1.0.3"
+    "cluster-rpc": "^1.0.4"
   }
 }

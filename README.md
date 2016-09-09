@@ -28,14 +28,31 @@ If you need that functionaliy, use v1 instead of v2.
 Usage
 =====
 
+In its simplest form, you use this module nearly exactly the way you would
+the any other storage module, with the exception that you must wait for
+the inter-process initialization to complete.
+
+When not using any of the options the usage is the same for the master and the worker:
+
+```javascript
+require('cluster-store').create().then(function (store) {
+  // initialization is now complete
+  store.set('foo', 'bar');
+});
+```
+
 ### standalone (non-cluster)
 --------------
 
-The usage is exactly the same as **master**, no changes necessary.
+There is no disadvantage to using this module standalone.
+The additional overhead of inter-process communication is only added when
+a worker is added.
+
+As such, the standalone usage is identical to usage in master process, as seen below.
 
 ### master
 
-In the **master**/**standalone** process you will create the real store instance.
+In the **master** process you will create the real store instance.
 
 If you need to manually specify which worker will be enabled for this funcitonality
 you must set `addOnFork` to `false` and call `addWorker()` manually.
@@ -46,7 +63,7 @@ you must set `addOnFork` to `false` and call `addWorker()` manually.
 var cluster = require('cluster');
 
 var cstore = require('cluster-store/master').create({
-  name: 'foo-store'
+  name: 'foo-store'       // necessary when using multiple instances
 , store: null             // use default in-memory store
 , addOnFork: true         // default
 });
@@ -59,7 +76,8 @@ cstore.then(function (store) {
 });
 ```
 
-Note: `store` can be replaced with any `express/session` store, such as:
+Note: `store` can be replaced with any `express/session`-compatible store, such as:
+
   * `new require('express-session/session/memory')()`
   * `require('level-session-store')(session)`
   * and others
@@ -113,48 +131,21 @@ Example
 'use strict';
 
 var cluster = require('cluster');
-var cstore;
 
+require('cluster-store').create({
+  name: 'foo-store'
+}).then(function (store) {
+  if (cluster.isMaster) {
+    store.set('foo', 'bar');
+  }
+
+  store.get('foo', function (err, result) {
+    console.log(result);
+  });
+});
 
 if (cluster.isMaster) {
-
-
-  cstore = require('./master').create({
-    name: 'foo-level'
-  });
-  cstore.then(function (store) {
-    store.put('foo', 'bar');
-  });
-
-  // create as many workers as you need
   cluster.fork();
-
-
+  cluster.fork();
 }
-else {
-
-
-  cstore = require('./worker').create({
-    name: 'foo-level'
-  });
-
-
-}
-
-
-cstore.then(function (store) {
-  setTimeout(function () {
-    store.get('foo', function (err, result) {
-      console.log(cluster.isMaster && '0' || cluster.worker.id.toString(), "store.get('foo')", result);
-
-      if (!cluster.isMaster) {
-        process.exit(0);
-      }
-    });
-  }, 250);
-});
-
-process.on('unhandledRejection', function (err) {
-  console.log('unhandledRejection', err);
-});
 ```

@@ -1,0 +1,32 @@
+{
+  "name": "cluster-store",
+  "version": "2.0.0",
+  "description": "A wrapper to enable the use of any in-process store with node cluster via cluster process and worker messages (i.e. for Raspberry Pi servers).",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test-cluster.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coolaj86/cluster-store.git"
+  },
+  "keywords": [
+    "store",
+    "session",
+    "connect",
+    "express",
+    "memstore",
+    "cluster",
+    "rpi2"
+  ],
+  "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/coolaj86/cluster-store/issues"
+  },
+  "homepage": "https://github.com/coolaj86/cluster-store#readme",
+  "dependencies": {
+    "cluster-rpc": "^1.0.3"
+  }
+}

@@ -14,5 +14,6 @@ module.exports.create = function (opts) {
     ]
   , name: 'memstore.' + (opts.name || '')
   , master: opts.master
+  , addOnFork: opts.addOnFork
   });
 };

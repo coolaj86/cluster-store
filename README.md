@@ -35,9 +35,10 @@ The usage is exactly the same as **master**, no changes necessary.
 
 ### master
 
-In the **master**/**standalone** process you will create the real store instance
-and then in the you must pass each worker via `addWorker()` so that it signals
-the worker to create its own rpc-wrapped instance.
+In the **master**/**standalone** process you will create the real store instance.
+
+If you need to manually specify which worker will be enabled for this funcitonality
+you must set `addOnFork` to `false` and call `addWorker()` manually.
 
 ```javascript
 'use strict';
@@ -46,10 +47,12 @@ var cluster = require('cluster');
 
 var cstore = require('cluster-store/master').create({
   name: 'foo-store'
-, store: null // use default in-memory store
+, store: null             // use default in-memory store
+, addOnFork: true         // default
 });
 
-cstore.addWorker(cluster.fork());
+// if you addOnFork is set to false you can add specific forks manually
+//cstore.addWorker(cluster.fork());
 
 cstore.then(function (store) {
   store.set('foo', 'bar');
@@ -119,10 +122,12 @@ if (cluster.isMaster) {
   cstore = require('./master').create({
     name: 'foo-level'
   });
-  cstore.addWorker(cluster.fork());
   cstore.then(function (store) {
     store.put('foo', 'bar');
   });
+
+  // create as many workers as you need
+  cluster.fork();
 
 
 }

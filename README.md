@@ -20,9 +20,10 @@ npm install --save memstore-cluster@2.x
 v1.x vs v2.x
 ------------
 
-The old v1 used `ws` which makes it usable when clustering node processes without using `cluster`.
+The [old v1](https://github.com/coolaj86/cluster-store/tree/v1.x)
+used `ws` which makes it usable when clustering node processes without using `cluster`.
 
-If you need that functionaliy, use it.
+If you need that functionaliy, use v1 instead of v2.
 
 Usage
 =====
@@ -45,6 +46,7 @@ var cluster = require('cluster');
 
 var cstore = require('cluster-store/master').create({
   name: 'foo-store'
+, store: null // use default in-memory store
 });
 
 cstore.addWorker(cluster.fork());
@@ -53,6 +55,11 @@ cstore.then(function (store) {
   store.set('foo', 'bar');
 });
 ```
+
+Note: `store` can be replaced with any `express/session` store, such as:
+  * `new require('express-session/session/memory')()`
+  * `require('level-session-store')(session)`
+  * and others
 
 ### worker
 

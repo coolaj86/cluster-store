@@ -1,6 +1,6 @@
 {
   "name": "cluster-store",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A wrapper to enable the use of any in-process store with node cluster via cluster process and worker messages (i.e. for Raspberry Pi servers).",
   "main": "index.js",
   "scripts": {

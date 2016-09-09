@@ -11,10 +11,12 @@ if (cluster.isMaster) {
   cstore = require('./master').create({
     name: 'foo-level'
   });
-  cstore.addWorker(cluster.fork());
   cstore.then(function (db) {
     db.set('foo', 'bar');
   });
+
+  cluster.fork();
+  cluster.fork();
 
 
 }

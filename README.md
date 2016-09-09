@@ -14,7 +14,7 @@ Install
 =======
 
 ```
-npm install --save memstore-cluster@2.x
+npm install --save cluster-store@2.x
 ```
 
 v1.x vs v2.x
